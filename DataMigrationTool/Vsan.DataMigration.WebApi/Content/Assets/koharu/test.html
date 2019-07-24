@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+<script src="L2Dwidget.min.js"></script>
+<script>
+    L2Dwidget.init({
+        "model": {
+            //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型
+            jsonPath: "koharu.model.json",
+            "scale": 1
+        },
+        "display": {
+            "position": "left", //看板娘的表现位置
+            "width": 200,  //小萝莉的宽度
+            "height": 300, //小萝莉的高度
+            "hOffset": 100,
+            "vOffset": 50
+        },
+        //"mobile": {
+        //    "show": false,
+        //    "scale":5
+        //},
+        "react": {
+            "opacityDefault": 0.8,
+            "opacityOnHover": 0.1
+        }
+    });
+</script>
+</body>
+</html>

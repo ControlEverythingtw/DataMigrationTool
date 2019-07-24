@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "工单管理";
+}
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-inline">
+        <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn " lay-event="search">搜索</button>
+        <button class="layui-btn " lay-event="add">添加</button>
+    </div>
+</script>
+
+<div hidden="" id="showInput">
+    <div style="margin:10px 30px 10px -10px; ">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="OrderId" class="layui-input" Name="Id" placeholder="订单号">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开始页</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" value="2" Name="Index" placeholder="开始页">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">页尺寸</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" value="100" Name="Size" placeholder="页尺寸">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">总数</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" value="1000" Name="Count" placeholder="总数">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/html" id="barDemo">
+    <button class="layui-btn layui-btn-xs layui-btn-warm " lay-event="reStart">重试</button>
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="deleteRow">删除</a>
+</script>
+
+@section scripts{
+    <script>
+        if (top.layer) {
+            top.layer.closeAll();
+        }
+        layui.use(['table', 'form'],
+            function () {
+                var table = layui.table;
+                var $ = layui.$;
+                var form = layui.form;
+                //资源名称
+                var url_workorder = '/api/WorkOrder';
+                var url_workorder_add = '/appPage/WorkOrder/Add';
+                var url_workorder_reStart = '/api/work_order/restart/';
+
+                form.on('submit(formDemo)',
+                    function (data) {
+
+                        $("input[name=Id]").val(orderId);
+
+                        $.get(url_workorder_reStart, data.field,
+                            function (res) {
+                                okAlert("成功");
+                            }).error(function (req, info, ex) {
+                                errorAlert(req.responseJSON.ExceptionMessage + "\n" + ex);
+                            });
+
+                        return false;
+                    });
+
+                //重新加载Table
+                window.reLoadTable = function () {
+
+                    var where = {
+                        keyword: $("#keyword").val(),
+                    }
+                    table.reload('test',
+                        {
+                            where: where,
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            },
+                            done: function () {
+                                $("#keyword").val(where.keyword)
+                            }
+                        });
+                }
+                table.render({
+                    elem: '#test',
+                    url: url_workorder,
+                    toolbar: '#toolbarDemo',
+                    title: '工单',
+                    cols: [
+                        [
+                            //  { type: 'checkbox', fixed: 'left' }
+                            { field: 'OrderId', title: '订单号', minWidth: 120, align: 'center', fixed: 'left' },
+                            { field: 'Remake', title: '备注', minWidth: 200, align: 'center' },
+                            { field: 'State', title: '状态', minWidth: 120, align: 'center' },
+                            {
+                                field: 'InportTable',
+                                title: '导入源',
+                                width: 120,
+                                align: 'center',
+                                templet: function (res) {
+                                    return res.InportSourceName + ' ' + res.InportTable;
+                                }
+                            },
+                            {
+                                field: 'ExportTable',
+                                title: '导出源',
+                                width: 120,
+                                align: 'center',
+                                templet: function (res) {
+                                    return res.ExportSourceName + ' ' + res.ExportTable;
+                                }
+                            },
+                            { field: 'CreateTime', title: '创建时间', align: 'center' },
+                            { field: 'StartTime', title: '开始时间', align: 'center' },
+                            { field: 'PageIndex', title: '当前页', align: 'center' },
+                            { field: 'PageSize', title: '每页数量', align: 'center' },
+                            { field: 'DataCount', title: '完成行数', align: 'center' },
+                            { field: 'EndTime', title: '完成时间', align: 'center' },
+                            { fixed: 'right', width: 150, title: '操作', fixed: 'right', toolbar: '#barDemo' }
+                        ]
+                    ],
+                    page: true
+                });
+
+                //头工具栏事件
+                table.on('toolbar(test)',
+                    function (obj) {
+
+                        switch (obj.event) {
+                            case 'search':
+                                reLoadTable();
+                                break;
+
+                            case 'add':
+                                layer.open({
+                                    type: 2,
+                                    offset: 't',
+                                    title: '添加订单',
+                                    shadeClose: true,
+                                    shade: 0.5,
+                                    area: [width, height],
+                                    content: [url_workorder_add, , 'no'] //iframe的url
+                                });
+                                break;
+                        };
+                    });
+
+                var orderId = '';
+
+                //监听行工具事件
+                table.on('tool(test)',
+                    function (obj) {
+                        var data = obj.data;
+                        if (obj.event === 'reStart') {
+
+                            orderId = data.OrderId;
+                            console.log(data.OrderId);
+
+                            $("input[name=Id]").val(data.OrderId);
+                            $("#OrderId").val(data.OrderId);
+                            
+                            layer.open({
+                                type: 1,
+                                offset: 't',
+                                title: '输入配置',
+                                shadeClose: true,
+                                shade: 0.5,
+                                area: [width, height],
+                                content: $("#showInput").html()
+                            });
+                            $("input[name=Id]").val(data.OrderId);
+                        }
+                    });
+
+            });
+    </script>
+}
+

@@ -1,0 +1,191 @@
+﻿@{
+    ViewBag.Title = "添加工单";
+}
+<div id="showEdit">
+    <div style="margin:10px 30px 10px -10px; ">
+        <form class="layui-form" action="">
+            <input name="OrderId" hidden="" value="@ViewBag.OrderId" />
+            <div class="layui-form-item">
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test5" placeholder="yyyy-MM-dd HH:mm:ss">
+                </div>
+                <div class="layui-form-mid layui-word-aux">不填为立即执行</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">导入源</label>
+                <div class="layui-input-block">
+                    <select name="InportSourceId" class="data_source_select" lay-filter="inportSourceId" id="inportSourceId" required="" lay-required lay-search="" placeholder="导入源">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">导出到</label>
+                <div class="layui-input-block">
+                    <select name="ExportSourceId" class="data_source_select" lay-filter="exportSourceId" id="exportSourceId" required="" lay-required lay-search="" placeholder="导出源">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">条件</label>
+                <div class="layui-input-block">
+                    <input type="text" name="InportWhere" class="layui-input" required="" lay-required placeholder="导入源查询条件">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="text" name="InportOrderByField" required="" lay-required class="layui-input" placeholder="导入源查询排序">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">导入总条数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="DataCount" value="1000" required="" lay-required class="layui-input" placeholder="每次导入行数">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">每次导入</label>
+                <div class="layui-input-block">
+                    <input type="text" name="PageSize" value="100" required="" lay-required class="layui-input" placeholder="每次导入行数">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">字段映射</label>
+                <div class="layui-input-block">
+                    <button class="layui-btn " type="button" id="field_mapping">配置映射</button>
+                    <table class="layui-hide" id="field_mapping_table" lay-filter="test"></table>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="Remake" required="" lay-required placeholder="请输入备注" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var index = undefined;
+        if (parent.layer) {
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        }
+        layui.use(['form', 'laydate'],
+            function () {
+                var $ = layui.$;
+                var form = layui.form;
+                var laydate = layui.laydate;
+
+                var urlWorkOrder = '/api/workOrder/';
+                var urlDatasucore = '/api/dataSource/selectData/';
+                var urlFieldmapping = '/appPage/fieldmapping/index2';
+                var dataSucores = [];
+
+                //获取数据源
+                renderSelect('.data_source_select',
+                    urlDatasucore,
+                    {
+                        valueField: 'Id',
+                        textField: 'DataSourceName',
+                        callBack: function (res) {
+                            dataSucores = res.data;
+                            form.render('select');
+                            parent.layer.iframeAuto(index);
+                        }
+                    })
+
+
+                //日期时间选择器
+                laydate.render({
+                    elem: '#test5',
+                    type: 'datetime'
+                });
+
+
+                $('#field_mapping').on('click',
+                    function () {
+
+                        top.orderId = $("input[name=OrderId]").val();
+
+                        if (!top.inportSource) {
+                            errorAlert("请选择导入源 ");
+                            return;
+                        }
+                        if (!top.exportSource) {
+                            errorAlert("请选择导出源 ");
+                            return;
+                        }
+                        if (top.exportSource.Id === top.inportSource.Id) {
+                            errorAlert("导入源和导出源不能相同 ");
+                            return;
+                        }
+
+                        top.layer.open({
+                            type: 2,
+                            title: '配置字段映射',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['90%', '90%'],
+                            content: urlFieldmapping //iframe的url
+                        });
+
+                    });
+
+                //监听类型选择事件
+                form.on('select(inportSourceId)',
+                    function (data) {
+                        var inSource = dataSucores.find('Id', data.value);
+                        top['inportSource'] = inSource;
+                    });
+
+                form.on('select(exportSourceId)',
+                    function (data) {
+                        var exSucore = dataSucores.find('Id', data.value);
+                        top['exportSource'] = exSucore;
+                    });
+
+                form.render();
+
+                //监听提交
+                form.on('submit(formDemo)',
+                    function (data) {
+
+                        data.field.InportSourceName = top.inportSource.DataSourceName;
+                        data.field.ExportSourceName = top.exportSource.DataSourceName;
+                        data.field.InportTable = top.inportSource.TableName;
+                        data.field.ExportTable = top.exportSource.TableName;
+
+                        $.post(urlWorkOrder,
+                            data.field,
+                            function (res) {
+                                okAlert("添加成功",
+                                    function () {
+                                        parent.layer.close(index);
+                                        parent.reLoadTable();
+                                    });
+                            }).error(function (r, s, c) {
+                                console.log(r);
+                                errorAlert("添加失败 :" + r.responseJSON.ExceptionMessage);
+                            });
+
+                        return false;
+                    });
+            });
+    </script>
+}
+
+
+

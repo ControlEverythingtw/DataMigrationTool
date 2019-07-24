@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3d2287cc69b44435a20db2ec4080b855" Name="Diagram1">
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.data_source" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.data_source_fields" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.dictionary" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.field_mapping" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.field_method_mapping" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.log" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.method" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.permission" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.role" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.role_permission_mapping" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.user_account" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.user_role_mapping" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Vsan.DataMigration.Models.work_order" Width="1.5" PointX="10.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

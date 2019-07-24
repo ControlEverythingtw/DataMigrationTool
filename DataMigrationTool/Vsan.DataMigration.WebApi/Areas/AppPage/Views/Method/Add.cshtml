@@ -1,0 +1,215 @@
+﻿@{
+    ViewBag.Title = "添加方法";
+}
+<div id="showEdit">
+
+    <div style="margin:10px 30px 10px -10px; ">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">程序集</label>
+                <div class="layui-input-block" id="assemblyPath_box">
+                    <select name="AssemblyPath" lay-filter="assemblyPath" id="assemblyPath" lay-search="" placeholder="程序集">
+                        <option value="">请选择</option>
+                    </select>
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="uploadAssembly">添加DLL</button>
+                        <blockquote id="show_upload_files" hidden class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览：
+                            <div class="layui-upload-list" id="demo2"></div>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">类全名</label>
+                <div class="layui-input-block" id="type_input_box">
+                    <select name="TypeFillName" lay-filter="typeFillName" id="typeFillName" lay-search="" placeholder="类全名">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">方法名</label>
+                <div class="layui-input-block" id="method_input_box">
+                    <select name="MethodName" lay-filter="methodName" id="methodName" lay-search="" placeholder="表">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">静态否</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" id="isStatic"  name="IsStatic" lay-skin="switch" lay-filter="switchStatic" lay-text="是|否">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea name="Description" placeholder="请输入描述" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var index = undefined;
+        if (parent.layer) {
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        }
+        layui.use(['form','upload'], function () {
+            var $ = layui.$;
+            var form = layui.form;
+            var upload = layui.upload;
+            window.typeViews = [];
+            var url_edit = '/api/methods/';
+            var url_uploadAssembly = '/api/file/uploadAssembly';
+            var url_GetAssemblys = '/api/file/assemblys';
+            var url_GetTypes = '/api/file/types';
+
+           
+            // option = {
+            //    defaultValue: '',
+            //    defaultText: '请输入或选择',
+            //    valueField: 'id',
+            //    textField: 'text', 
+            //}
+
+            renderSelect('assemblyPath', url_GetAssemblys, {
+                callBack: function (data) {
+                    form.render('select');
+                },
+            })
+            form.on('select(assemblyPath)', function (data) {
+                
+                renderSelect('typeFillName', url_GetTypes + "?assemblyName=" + data.value, {
+                    valueField: 'FullName',
+                    textField:'FullName',
+                    callBack: function (res) {
+                        window.typeViews = res.data;
+                        form.render('select');
+                      
+                    },
+                })
+            });
+            //监听类型选择事件
+            form.on('select(typeFillName)', function (data) {
+                randerMethodSelect(data.value)
+            });
+
+            form.on('select(methodName)', function (data) {
+
+                var tag = $("#methodName option:selected").attr("tag");
+                console.log(tag);
+
+                if (tag == "true") {
+                    $("#isStatic").attr("checked", true);
+                } else {
+                    $("#isStatic").removeAttr("checked");
+                }
+                form.render("checkbox");
+            });
+
+            function randerMethodSelect(typefullName) {
+                if (!window.typeViews) {
+                    return;
+                }
+                var types = window.typeViews;
+                var data = [];
+                for (var i = 0; i < types.length; i++) {
+                    var item = types[i];
+                    if (item.FullName == typefullName) {
+                        data = item.Methods;
+                        break;
+                    }
+                }
+                var html = ['<option value="">请输入或选择</option>'];
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i]
+                    html.push(' <option tag="', item.IsStatic, '" value="', item.MethodName, '">', item.MethodName, '</option>');
+                }
+                $("#methodName").html(html.join(''));
+                form.render('select');
+            }
+
+
+
+            //多dll上传
+            upload.render({ //允许上传的文件后缀
+                elem: '#uploadAssembly'
+                , url: url_uploadAssembly
+                , accept: 'file' //普通文件
+                , exts: 'dll|exe' //只允许上传压缩文件
+                , multiple: true
+                , before: function (obj) {
+                    $('#demo2').html('');
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        var r = Math.round(Math.random() * 255 + 1)
+                        var g = Math.round(Math.random() * 255 + 1)
+                        var b = Math.round(Math.random() * 255 + 1)
+                        var arr = file.name.split('.');
+                        if (arr[arr.length - 1] == 'dll' || arr[arr.length - 1] == 'exe') {
+                            $('#demo2').append('<p style="color:rgba(' + r + ',' + g + ',' + b + ',1)">' + file.name + '</p>')
+                          
+                        }
+                    });
+                   
+                }
+                , done: function (res) {
+                    if (res.code!=0) {
+                        alertError("上传失败 :"+res.message, function () {
+                            parent.layer.colse(index);
+                        });
+                        return;
+                    }
+                    var select = $('#assemblyPath');
+                    var data = res.data;
+                    for (var i = 0; i < data.length; i++) {
+                        var item = data[i];
+                        select.append('<option value="' + item + '">' + item + '</option >')
+                    }
+                    form.render('select');
+
+                    $("#show_upload_files").show();
+                   
+                }
+            });
+
+           
+
+            form.render();
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+
+                if (data.field.IsStatic == 'on') {
+                    data.field.IsStatic = true;
+                }
+                $.post(url_edit, data.field, function (res) {
+                    okAlert("添加成功", function () {
+                        parent.layer.close(index);
+                        parent.reLoadTable();
+                    });
+                }).error(function (r, s, c) {
+                    errorAlert("添加失败 :" + r.responseText);
+                });
+
+                return false;
+            });
+
+            //$('#table_input_box input').on('keydown', function (e) {
+            //    console.log(e);
+            //});
+        })
+    </script>
+}
+
+

@@ -1,0 +1,741 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Vsan.DataMigration.Models.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="data_source">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="DataSourceName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TypeCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Host" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Link" Type="varchar" MaxLength="1023" Nullable="false" />
+          <Property Name="DbName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Port" Type="int" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="data_source_fields">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DataSourceId" Type="bigint" Nullable="false" />
+          <Property Name="DataSourceName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldComment" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldType" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldLength" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FieldName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="KeyCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShowText" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DecimalValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="IntValue" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="field_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="OrderId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="TypeCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FieldIn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldOut" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="MethodId" Type="bigint" Nullable="false" />
+          <Property Name="MethodCount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="field_method_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+          <Property Name="FieldConfigId" Type="bigint" Nullable="false" />
+          <Property Name="MethodId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Content" Type="text" Nullable="false" />
+          <Property Name="TypeCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="GroupCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remake" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OperationObjectId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="OperationObjectIntId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="method">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="TypeCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AssemblyPath" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TypeFillName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="MethodName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsStatic" Type="bit" Nullable="false" />
+          <Property Name="Params" Type="text" Nullable="false" />
+          <Property Name="ReturnType" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="1023" Nullable="false" />
+        </EntityType>
+        <EntityType Name="permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PermissionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentId" Type="bigint" Nullable="false" />
+          <Property Name="Remake" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+          <Property Name="TypeCode" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentId" Type="bigint" Nullable="false" />
+          <Property Name="Remake" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="role_permission_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleId" Type="bigint" Nullable="false" />
+          <Property Name="PermissionId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="Nickname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="HeadPortrait" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TrueName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Credits" Type="bigint" Nullable="false" />
+          <Property Name="Level" Type="int" Nullable="false" />
+          <Property Name="InviterId" Type="bigint" Nullable="false" />
+          <Property Name="Mobile" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="EmpiricalValue" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_role_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="RoleId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="work_order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="OrderId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModifyTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Modifier" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+          <Property Name="InportSourceId" Type="bigint" Nullable="false" />
+          <Property Name="ExportSourceName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ExportSourceId" Type="bigint" Nullable="false" />
+          <Property Name="Remake" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldCount" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="ElapsedTime" Type="bigint" Nullable="false" />
+          <Property Name="Exception" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="InportTable" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ExportTable" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DataCount" Type="bigint" Nullable="false" />
+          <Property Name="InportWhere" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="InportOrderByField" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PageIndex" Type="int" Nullable="false" />
+          <Property Name="PageSize" Type="int" Nullable="false" />
+          <Property Name="InportSourceName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="VsanDataMigrationModelsStoreContainer">
+          <EntitySet Name="data_source" EntityType="Self.data_source" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="data_source_fields" EntityType="Self.data_source_fields" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="field_mapping" EntityType="Self.field_mapping" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="field_method_mapping" EntityType="Self.field_method_mapping" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="log" EntityType="Self.log" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="method" EntityType="Self.method" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="permission" EntityType="Self.permission" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="role" EntityType="Self.role" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="role_permission_mapping" EntityType="Self.role_permission_mapping" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="user_account" EntityType="Self.user_account" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="user_role_mapping" EntityType="Self.user_role_mapping" Schema="data_migration" store:Type="Tables" />
+          <EntitySet Name="work_order" EntityType="Self.work_order" Schema="data_migration" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Vsan.DataMigration.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DataMigrationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="data_source" EntityType="Vsan.DataMigration.Models.data_source" />
+          <EntitySet Name="data_source_fields" EntityType="Vsan.DataMigration.Models.data_source_fields" />
+          <EntitySet Name="dictionary" EntityType="Vsan.DataMigration.Models.dictionary" />
+          <EntitySet Name="field_mapping" EntityType="Vsan.DataMigration.Models.field_mapping" />
+          <EntitySet Name="field_method_mapping" EntityType="Vsan.DataMigration.Models.field_method_mapping" />
+          <EntitySet Name="log" EntityType="Vsan.DataMigration.Models.log" />
+          <EntitySet Name="method" EntityType="Vsan.DataMigration.Models.method" />
+          <EntitySet Name="permission" EntityType="Vsan.DataMigration.Models.permission" />
+          <EntitySet Name="role" EntityType="Vsan.DataMigration.Models.role" />
+          <EntitySet Name="role_permission_mapping" EntityType="Vsan.DataMigration.Models.role_permission_mapping" />
+          <EntitySet Name="user_account" EntityType="Vsan.DataMigration.Models.user_account" />
+          <EntitySet Name="user_role_mapping" EntityType="Vsan.DataMigration.Models.user_role_mapping" />
+          <EntitySet Name="work_order" EntityType="Vsan.DataMigration.Models.work_order" />
+        </EntityContainer>
+        <EntityType Name="data_source">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="DataSourceName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Account" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="1023" FixedLength="false" Unicode="false" />
+          <Property Name="DbName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Port" Type="Int32" Nullable="false" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="data_source_fields">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DataSourceId" Type="Int64" Nullable="false" />
+          <Property Name="DataSourceName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldComment" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldLength" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FieldName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KeyCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ShowText" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DecimalValue" Type="Decimal" Nullable="false" />
+          <Property Name="IntValue" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="field_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FieldIn" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldOut" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MethodId" Type="Int64" Nullable="false" />
+          <Property Name="MethodCount" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="field_method_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+          <Property Name="FieldConfigId" Type="Int64" Nullable="false" />
+          <Property Name="MethodId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GroupCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Remake" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OperationObjectId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="OperationObjectIntId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="method">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AssemblyPath" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TypeFillName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MethodName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsStatic" Type="Boolean" Nullable="false" />
+          <Property Name="Params" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ReturnType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="1023" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PermissionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ParentId" Type="Int64" Nullable="false" />
+          <Property Name="Remake" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ParentId" Type="Int64" Nullable="false" />
+          <Property Name="Remake" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="role_permission_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleId" Type="Int64" Nullable="false" />
+          <Property Name="PermissionId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Account" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="HeadPortrait" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TrueName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Decimal" Nullable="false" />
+          <Property Name="Credits" Type="Int64" Nullable="false" />
+          <Property Name="Level" Type="Int32" Nullable="false" />
+          <Property Name="InviterId" Type="Int64" Nullable="false" />
+          <Property Name="Mobile" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EmpiricalValue" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_role_mapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="RoleId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="work_order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ModifyTime" Type="DateTime" Nullable="false" />
+          <Property Name="Modifier" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="InportSourceId" Type="Int64" Nullable="false" />
+          <Property Name="ExportSourceName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ExportSourceId" Type="Int64" Nullable="false" />
+          <Property Name="Remake" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldCount" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" />
+          <Property Name="ElapsedTime" Type="Int64" Nullable="false" />
+          <Property Name="Exception" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="InportTable" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ExportTable" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DataCount" Type="Int64" Nullable="false" />
+          <Property Name="InportWhere" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="InportOrderByField" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PageIndex" Type="Int32" Nullable="false" />
+          <Property Name="PageSize" Type="Int32" Nullable="false" />
+          <Property Name="InportSourceName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VsanDataMigrationModelsStoreContainer" CdmEntityContainer="DataMigrationEntities">
+          <EntitySetMapping Name="data_source">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.data_source">
+              <MappingFragment StoreEntitySet="data_source">
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="DbName" ColumnName="DbName" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="DataSourceName" ColumnName="DataSourceName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_source_fields">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.data_source_fields">
+              <MappingFragment StoreEntitySet="data_source_fields">
+                <ScalarProperty Name="FieldLength" ColumnName="FieldLength" />
+                <ScalarProperty Name="FieldType" ColumnName="FieldType" />
+                <ScalarProperty Name="FieldComment" ColumnName="FieldComment" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="DataSourceName" ColumnName="DataSourceName" />
+                <ScalarProperty Name="DataSourceId" ColumnName="DataSourceId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dictionary">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.dictionary">
+              <MappingFragment StoreEntitySet="dictionary">
+                <ScalarProperty Name="IntValue" ColumnName="IntValue" />
+                <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
+                <ScalarProperty Name="ShowText" ColumnName="ShowText" />
+                <ScalarProperty Name="KeyCode" ColumnName="KeyCode" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="field_mapping">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.field_mapping">
+              <MappingFragment StoreEntitySet="field_mapping">
+                <ScalarProperty Name="MethodCount" ColumnName="MethodCount" />
+                <ScalarProperty Name="MethodId" ColumnName="MethodId" />
+                <ScalarProperty Name="FieldOut" ColumnName="FieldOut" />
+                <ScalarProperty Name="FieldIn" ColumnName="FieldIn" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="field_method_mapping">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.field_method_mapping">
+              <MappingFragment StoreEntitySet="field_method_mapping">
+                <ScalarProperty Name="MethodId" ColumnName="MethodId" />
+                <ScalarProperty Name="FieldConfigId" ColumnName="FieldConfigId" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="log">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.log">
+              <MappingFragment StoreEntitySet="log">
+                <ScalarProperty Name="OperationObjectIntId" ColumnName="OperationObjectIntId" />
+                <ScalarProperty Name="OperationObjectId" ColumnName="OperationObjectId" />
+                <ScalarProperty Name="Remake" ColumnName="Remake" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="method">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.method">
+              <MappingFragment StoreEntitySet="method">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ReturnType" ColumnName="ReturnType" />
+                <ScalarProperty Name="Params" ColumnName="Params" />
+                <ScalarProperty Name="IsStatic" ColumnName="IsStatic" />
+                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="TypeFillName" ColumnName="TypeFillName" />
+                <ScalarProperty Name="AssemblyPath" ColumnName="AssemblyPath" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="permission">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.permission">
+              <MappingFragment StoreEntitySet="permission">
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="Remake" ColumnName="Remake" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.role">
+              <MappingFragment StoreEntitySet="role">
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="Remake" ColumnName="Remake" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role_permission_mapping">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.role_permission_mapping">
+              <MappingFragment StoreEntitySet="role_permission_mapping">
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_account">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.user_account">
+              <MappingFragment StoreEntitySet="user_account">
+                <ScalarProperty Name="EmpiricalValue" ColumnName="EmpiricalValue" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="InviterId" ColumnName="InviterId" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Credits" ColumnName="Credits" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="TrueName" ColumnName="TrueName" />
+                <ScalarProperty Name="HeadPortrait" ColumnName="HeadPortrait" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_role_mapping">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.user_role_mapping">
+              <MappingFragment StoreEntitySet="user_role_mapping">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="work_order">
+            <EntityTypeMapping TypeName="Vsan.DataMigration.Models.work_order">
+              <MappingFragment StoreEntitySet="work_order">
+                <ScalarProperty Name="InportSourceName" ColumnName="InportSourceName" />
+                <ScalarProperty Name="PageSize" ColumnName="PageSize" />
+                <ScalarProperty Name="PageIndex" ColumnName="PageIndex" />
+                <ScalarProperty Name="InportOrderByField" ColumnName="InportOrderByField" />
+                <ScalarProperty Name="InportWhere" ColumnName="InportWhere" />
+                <ScalarProperty Name="DataCount" ColumnName="DataCount" />
+                <ScalarProperty Name="ExportTable" ColumnName="ExportTable" />
+                <ScalarProperty Name="InportTable" ColumnName="InportTable" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="ElapsedTime" ColumnName="ElapsedTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="FieldCount" ColumnName="FieldCount" />
+                <ScalarProperty Name="Remake" ColumnName="Remake" />
+                <ScalarProperty Name="ExportSourceId" ColumnName="ExportSourceId" />
+                <ScalarProperty Name="ExportSourceName" ColumnName="ExportSourceName" />
+                <ScalarProperty Name="InportSourceId" ColumnName="InportSourceId" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

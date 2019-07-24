@@ -1,0 +1,246 @@
+﻿@{
+    ViewBag.Title = "添加数据源";
+}
+<div id="showEdit">
+    <div style="margin:10px 30px 10px -10px; ">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">名称</label>
+                <div class="layui-input-block">
+                    <input id="dataSourceName" name="DataSourceName" placeholder="请输入名称" class="layui-input " />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="typeCode" id="type" lay-filter="typeCode" lay-verify="required" placeholder="请选择类型">
+                        <option value="">所有类型</option>
+                        <option value="SqlServer">SqlServer</option>
+                        <option value="MySql">MySql</option>
+                        <option value="Excel">Excel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">主机</label>
+                <div class="layui-input-block">
+                    <input name="host" id="host" placeholder="请输入主机" class="layui-input " />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">端口</label>
+                <div class="layui-input-block">
+                    <input name="port" id="port" value="" required placeholder="请输入数据库" class="layui-input " />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">用户</label>
+                <div class="layui-input-block">
+                    <input name="account" id="account" placeholder="请输入用户" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">密码</label>
+                <div class="layui-input-block">
+                    <input name="password" id="password" value="" required placeholder="请输入密码" class="layui-input " />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">数据库</label>
+                <div class="layui-input-block">
+                    <input name="dbName" id="dbName" value="" required placeholder="请输入数据库" class="layui-input " />
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">链接串</label>
+                <div class="layui-input-block">
+                    <input name="link" id="link" value="" required placeholder="" class="layui-input " />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label my-label">表</label>
+                <div class="layui-input-block" id="table_input_box">
+                    <select name="TableName" id="table" lay-search="" placeholder="表">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var index = undefined;
+        if (parent.layer) {
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        }
+        layui.use(['form'], function () {
+            var $ = layui.$;
+            var form = layui.form;
+
+            var url_edit = '/api/DataSource/'
+            var url_table = '/api/table/'
+
+
+            form.render();
+
+            var sqlLinkTemple = 'Data Source = myServerAddress'
+                + '; Initial Catalog = myDataBase'
+                + '; User Id = myUsername'
+                + '; Password = myPassword; ';
+            var mySqlLinkTemple = 'User ID=root;'
+                + 'Password=myPassword;'
+                + 'Host = localhost; '
+                + 'Port = 3306; '
+                + 'Database = myDataBase;'
+                + 'Direct = true; '
+                + 'Protocol = TCP; '
+                + 'Compress = false; '
+                + 'Pooling = true;'
+                + 'Min Pool Size = 0; '
+                + 'Max Pool Size = 100; '
+                + 'Connection Lifetime = ';
+            var sqlLink = "";
+
+            var typeCode = '';
+
+
+            //监听选择类型事件
+            form.on('select(typeCode)', function (data) {
+                typeCode = data.value; //得到被选中的值
+                console.log(typeCode);
+                connString()
+
+            });
+
+            function connString() {
+
+                if (typeCode == 'MySql') {
+
+                    var port = $("#port").val() == '' ? '3306' : $("#port").val();
+
+                    $("#port").val(port);
+
+                    sqlLink = 'User ID=' + $("#account").val() + ';'
+                        + 'Password=' + $("#password").val() + ';'
+                        + 'Host = ' + $("#host").val() + '; '
+                        + 'Port = ' + port + '; '
+                        + 'Database = ' + $("#dbName").val() + ';'
+                        + 'Character Set = utf8;'
+                        ;
+
+                    $("#link").val(sqlLink);
+                } else if (typeCode == 'SqlServer') {
+
+                    var port = $("#port").val() == '' ? '1433' : $("#port").val();
+                    $("#port").val(port);
+
+                    sqlLink = 'Data Source = ' + $("#host").val() + ',' + port
+                        + '; Initial Catalog =' + $("#dbName").val()
+                        + '; User Id = ' + $("#account").val()
+                        + '; Password = ' + $("#password").val() + '; ';
+                    $("#link").val(sqlLink);
+                } else {
+                    $("#link").val('');
+                }
+
+            }
+
+
+            $("#showEdit input").on("input", function (e) {
+                //获取input输入的值
+                connString();
+                isLoading = false;
+                table = [];
+            });
+
+            $("#dataSourceName").on("input", function (e) {
+                var that = $(this);
+                var val = that.val();
+                if (val && val.trim()!= '') {
+                    $.get("/api/DataSource/IsNameExist/" + val, function (res) {
+                        if (res) {
+                            errorAlert('名称:"' + val + '"已经存在，请勿重复添加', function () {
+                                that.val('');
+                            });
+                        }
+                    });
+                }
+            });
+
+
+
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+
+                $.post(url_edit, data.field, function (res) {
+                    okAlert("添加成功", function () {
+                        parent.location.reload();
+                    });
+                }).error(function (r, s, c) {
+                    errorAlert("添加失败 ");
+                });
+
+                return false;
+            });
+
+            var table = [];
+            var isLoading = false;
+            var table_input = $('#table_input_box input');
+
+            table_input.on('focus', function (e) {
+
+                var val = table_input.val()
+
+                console.log(val);
+
+                if (table.length <= 0 && isLoading == false) {
+
+                    isLoading = true;
+
+                    layer.load();
+
+                    $.get(url_table,
+                        {
+                            typeCode: $("#type").val(),
+                            dbName: $("#dbName").val(),
+                            Link: $("#link").val()
+                        },
+                        function (res) {
+
+                            table = res;
+
+                            var html = ['<option value="">请输入或选择</option>'];
+
+                            for (var i = 0; i < res.length; i++) {
+                                var item = res[i]
+                                html.push(' <option value="', item.TableName, '">', item.TableName,'--',item.TableComment ,'</option>');
+                            }
+
+                            $("#table").html(html.join(''));
+
+                            form.render('select');
+
+                            isLoading = false;
+                            layer.closeAll('loading');
+                            table_input.focus();
+                        }).error(function (req, info, ex) {
+                            console.log(req.responseJSON.ExceptionMessage);
+                            layer.closeAll('loading');
+                            errorAlert(req.responseJSON.ExceptionMessage + "\n" + ex);
+                        });
+
+                }
+            });
+        })
+    </script>
+}

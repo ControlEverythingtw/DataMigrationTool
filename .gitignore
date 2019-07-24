@@ -3,3 +3,14 @@
 ################################################################################
 
 /DataMigrationTool/packages
+/DataMigrationTool/.vs
+/DataMigrationTool/Vsan.Common/bin
+/DataMigrationTool/Vsan.Common/obj
+/DataMigrationTool/Vsan.DataMigration.Core/bin
+/DataMigrationTool/Vsan.DataMigration.Core/obj
+/DataMigrationTool/Vsan.DataMigration.Models/bin
+/DataMigrationTool/Vsan.DataMigration.Models/obj
+/DataMigrationTool/Vsan.DataMigration.WebApi/bin
+/DataMigrationTool/Vsan.DataMigration.WebApi/obj
+/DataMigrationTool/Vsan.Scheduling.Server/bin/Debug
+/DataMigrationTool/Vsan.Scheduling.Server/obj

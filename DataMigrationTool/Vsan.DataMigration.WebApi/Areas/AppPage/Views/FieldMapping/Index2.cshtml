@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewBag.Title = "Index2";
+}
+<div id="showEdit">
+    <div style="margin: 10px 30px 10px -10px;">
+        <div class="layui-form" lay-filter="test1">
+            <div class="layui-container">
+                <div class="layui-row">
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+                        源字段
+                    </div>
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+                        转换方法
+                    </div>
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+                        导入到字段
+                    </div>
+                </div>
+                <div id="valueBox">
+
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+
+                    </div>
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+
+                    </div>
+                    <div class="layui-col-xs6 layui-col-sm4 layui-col-md4">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="valueTeml" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+            <select class="select-field" name="field"    lay-search=""></select>
+        </div>
+        <div class="layui-col-xs4 layui-col-sm12 layui-col-md4">
+            <select class="select-method" name="method"    lay-search=""></select>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+            <input type="text" name="toField"
+                   value="{{toFieldValue}}"
+                   data-commt="{{toFieldCommt}}"
+                   data-type="{{toFieldType}}" readonly=""
+                   required lay-verify="required" 
+                   placeholder="" 
+                 
+                   autocomplete="off" 
+                   class="layui-input layui-disabled toField">
+        </div>
+
+
+    </div>
+</script>
+
+
+@section scripts
+{
+    <script>
+        //Demo
+        layui.use('form',
+            function() {
+                var form = layui.form;
+                var urlFieldMapping = '/api/FieldConfig/';
+                var urlFields = '/api/Fields/';
+                var urlMethods = '/api/Methods/';
+                var $ = layui.$;
+                //1、获取源字段生成html
+                $.get(urlFields + top.exportSource.Id,
+                    function(res) {
+
+                        var html = [];
+                        var temlp = $('#valueTeml').text();
+
+                        for (var i = 0; i < res.data.length; i++) {
+                            var item = res.data[i];
+                            var itemHtml = temlp.replace('{{toFieldValue}}', item.Id)
+                                .replace('{{toFieldCommt}}', item.Text)
+                                .replace('{{toFieldType}}', item.Type);
+                            html.push(itemHtml);
+                        }
+                        $('#valueBox').html(html.join(''));
+                        //2、渲染可选字段
+                        renderSelect('.select-field',
+                            urlFields + top.inportSource.Id,
+                            {
+                                valueField: 'Id',
+                                textField: 'Id',
+                                callBack: function(res) {
+                                }
+                            });
+
+                        //3、渲染可选方法
+                        renderSelect('.select-method',
+                            urlMethods + "?page=1&limit=1000",
+                            {
+                                valueField: 'Id',
+                                textField: 'Description',
+                                callBack: function(res) {
+                                    form.render('select');
+                                }
+                            });
+
+
+                    });
+
+                $("#valueBox").on("mouseover",
+                    ".toField",
+                    function() {
+                        var that = $(this);
+                        var value = that.val();
+                        layer.tips(that.data('commt') + that.data('type'), '.toField[value=' + value + ']');
+                        // layer.msg(that.data('commt') + that.data('type'));
+                    });
+
+                //监听提交
+                form.on('submit(formDemo)',
+                    function(data) {
+
+                        var obj = {
+                            orderId: top.orderId,
+                            fieldMapping:[]
+                        }
+                        var fieldMapping = [];
+
+                        $("#valueBox .layui-row").each(function() {
+                            var $ele = $(this);
+                            var mapping = {};
+                            $ele.find('[name]').each(function () {
+                                var $eleItem = $(this);
+                                mapping[$eleItem.attr('name')] = $eleItem.val();
+                            });
+                            fieldMapping.push(mapping);
+                        });
+                        obj.fieldMapping = fieldMapping;
+
+
+                        $.post(urlFieldMapping,
+                            obj,
+                            function(res) {
+                                okAlert("添加成功");
+                            }).error(function(r, s, ex) {
+                                errorAlert(req.responseJSON.ExceptionMessage + "\n" + ex);
+                            });
+
+                       console.log(JSON.stringify(obj));
+                        return false;
+                    });
+            });
+    </script>
+}
+
+

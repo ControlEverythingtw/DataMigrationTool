@@ -1,0 +1,21 @@
+{
+    "version": "Sample 1.0.0",
+    "model": "koharu.moc",
+    "textures": ["texture_00.png"],
+    "motions": {
+        "idle": [{ "file": "idle.mtn" }],
+        "": [
+            { "file": "06.mtn" },
+            { "file": "07.mtn" },
+            { "file": "08.mtn" },
+            { "file": "09.mtn" },
+            { "file": "01.mtn" },
+            { "file": "02.mtn" },
+            { "file": "03.mtn" },
+            { "file": "04.mtn" },
+            { "file": "05.mtn" }
+        ]
+    },
+    "physics": "koharu.physics.json",
+    "name": "koharu"
+}

@@ -1,0 +1,311 @@
+﻿@{
+    ViewBag.Title = "工单字段映射管理";
+}
+
+<style>
+    /* 防止下拉框的下拉列表被隐藏---必须设置--- */        
+    .layui-table-cell {            overflow: visible !important;        } 
+    /* 使得下拉框与单元格刚好合适 */       
+    td .layui-form-select{
+        margin-top: -10px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }     
+</style>
+
+<form class="layui-form">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</form>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-inline">
+        <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline " style="width:200px">
+        <select name="dataSource" id="dataSource" lay-verify="required"   placeholder="所有数据源">
+            <option value="">所有数据源</option>
+        </select>
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn " lay-event="search">搜索</button>
+        <button class="layui-btn " lay-event="save">保存</button>
+        <a class="layui-btn  layui-btn-danger " lay-event="deleteRows">批量删除</a>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-warm " lay-event="configMethod">配置方法</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="deleteRow">删除</a>
+</script>
+
+<script type="text/html" id="selectSourceTeml" >    
+    <select name='selectSource' class="selectSource"  lay-filter='selectSource' lay-search=''>
+        <option value="">请选择</option>
+    </select>
+</script>
+
+
+@section scripts{
+    <script>
+        if (top.layer) {
+            top.layer.closeAll('loading');
+        }
+        layui.use(['table', 'form'],
+            function() {
+                var table = layui.table;
+                var $ = layui.$;
+                var form = layui.form;
+                //资源名称
+                var dsUrl = '/api/DataSource/';
+                var urlFieldMapping = '/api/FieldConfig/';
+                var urlFields = '/api/Fields/';
+
+                if (top.exportSource) {
+                    if (top.exportSource.Id) {
+                        urlFields += top.exportSource.Id;
+                    }
+                }
+
+
+                if (top.inportSource) {
+                    if (top.inportSource.Id) {
+
+                        urlFieldMapping += "?dataSource=" + top.inportSource.Id;
+                        //$('#dataSource').prop("disabled", 'true');
+                        //$('#dataSource').addClass('layui-disabled');
+                    }
+                }
+
+
+                function reloadSelect() {
+
+                    $.get(dsUrl,
+                        { page: 1, limit: 1000 },
+                        function(res) {
+
+                            var data = res.data;
+
+                            var html = ['<option value="">所有数据源</option>'];
+
+                            for (var i = 0; i < data.length; i++) {
+                                var item = data[i]
+                                html.push(' <option value="', item.Id, '">', item.DataSourceName, '</option>');
+                            }
+                            $('#dataSource').html(html.join(''));
+
+                            form.render('select');
+                        });
+                }
+
+
+                //重新加载Table
+                function reLoadTable() {
+                    var where = {
+                        keyword: $("#keyword").val(),
+                        dataSource: $("#dataSource").val(),
+                    }
+                    table.reload('test',
+                        {
+                            where: where,
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            },
+                            done: function() {
+                                $("#keyword").val(where.keyword)
+                                $("#dataSource").each(function() {
+                                    var $ele = $(this),
+                                        $value = $ele.attr("data-value");
+                                    $ele.find("option[value = '" + where.dataSource + "']")
+                                        .attr("selected", "selected");
+                                });
+                                form.render('select');
+
+                            }
+                        });
+                }
+
+                form.on('select(selectSource)', function(data){
+                    console.log(data.value); //得到被选中的值
+
+                });  
+                table.render({
+                    elem: '#test',
+                    url: urlFieldMapping,
+                    where: {
+                        dataSource: top.inportSource.Id
+                    },
+                    toolbar: '#toolbarDemo',
+                    title: '字段映射',
+                    done: function() {
+                        renderSelect('.selectSource',
+                            urlFields,
+                            {
+                                valueField: 'Id',
+                                textField: 'Text',
+                                callBack: function(res) {
+                                    form.render('select');
+                                }
+                            });
+                    },
+                    cols: [
+                        [
+                            { type: 'checkbox', fixed: 'left' },
+                            { field: 'Id', title: '编号', width: 70, align: 'center', fixed: 'left' },
+                            { field: 'FieldIn', title: '源字段', minWidth: 100 },
+                            { field: 'FieldType', title: '源字段类型', minWidth: 100 },
+                            { field: 'FieldComment', title: '源字段说明', minWidth: 100 },
+                            {
+                                field: 'FieldOut',
+                                title: '映射字段',
+                                minWidth: 100,
+                                templet: '#selectSourceTeml'
+                            },
+                            { field: 'FieldOutType', title: '映射字段类型', minWidth: 100, align: 'right' },
+                            { field: 'FieldOutComment', title: '映射字段说明', minWidth: 100, align: 'right' },
+                            {
+                                field: 'Methods',
+                                title: '转换方法',
+                                minWidth: 200,
+                                align: 'center',
+                                templet: function(res) {
+                                    var arr = [];
+                                    for (var i = 0; i < res.Methods.length; i++) {
+                                        var item = res.Methods[i];
+                                        arr.push(item.MethodName, '(', item.Description, ')');
+                                    }
+                                    return arr.join('-->');
+                                }
+                            },
+                            { fixed: 'right', width: 200, title: '操作', toolbar: '#barDemo' }
+                        ]
+                    ],
+                    page: true,
+                    limit: 100
+                });
+
+                //头工具栏事件
+                table.on('toolbar(test)',
+                    function(obj) {
+
+                        switch (obj.event) {
+                        case 'search':
+                            reLoadTable();
+                            break;
+                        case 'add':
+
+                            var width = window.innerWidth > 800 ? '800px' : '90%';
+                            var height = window.innerWidth > 494 ? '494px' : '90%';
+
+                            layer.open({
+                                type: 2,
+                                title: '配置方法',
+                                shadeClose: true,
+                                shade: 0.8,
+                                area: ['90%', '90%'],
+                                content: addUrl //iframe的url
+                            });
+                            break;
+
+                        case 'deleteRows':
+                            var checkStatus = table.checkStatus('test'), data = checkStatus.data;
+
+                            var ids = [];
+
+                            //  console.log(JSON.stringify(data));
+
+                            for (var i = 0; i < data.length; i++) {
+                                ids.push(data[i].Id);
+                            }
+
+                            if (ids.length <= 0) {
+                                layer.msg('请选择数据.');
+                                return false;
+                            }
+
+                            layer.confirm('真的删除行么？',
+                                {
+                                    btn: ['确定', '取消'] //按钮
+                                },
+                                function(index) {
+                                    $.ajax({
+                                        type: "Post",
+                                        url: "/api/DataSourceFields/DeleteBatch",
+                                        data: { ids: ids },
+                                        success: function() {
+                                            reLoadTable();
+                                            layer.close(index);
+                                            okAlert("删除成功");
+                                        },
+                                        error: function(req, info, ex) {
+                                            errorAlert("删除失败" + info);
+                                        }
+                                    })
+                                },
+                                function() {
+                                    layer.msg('取消了');
+                                });
+                            break;
+                        };
+
+
+                    });
+
+                //监听行工具事件
+                table.on('tool(test)',
+                    function(obj) {
+                        var data = obj.data;
+                        if (obj.event === 'deleteRow') {
+                            layer.confirm('真的删除行么？',
+                                {
+                                    btn: ['确定', '取消'] //按钮
+                                },
+                                function(index) {
+                                    $.ajax({
+                                        url: fieldUrl + data.Id,
+                                        type: "Delete",
+                                        success: function() {
+                                            obj.del();
+                                            layer.close(index);
+                                            okAlert("删除成功");
+                                        },
+                                        error: function(req, info, ex) {
+                                            errorAlert("删除失败" + info);
+                                        }
+                                    })
+                                },
+                                function() {
+                                    layer.msg('取消了');
+                                });
+                        }
+                    });
+
+                table.on('edit(test)',
+                    function(obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+                        console.log(obj.value); //得到修改后的值
+                        console.log(obj.field); //当前编辑的字段名
+                        console.log(obj.data); //所在行的所有相关数据
+
+                        if (obj.field == 'FieldComment') {
+
+                            $.post('/api/DataSourceFields/AddComment',
+                                {
+                                    FieldId: obj.data.Id,
+                                    Comment: obj.value
+                                },
+                                function(res) {
+                                    if (res) {
+                                        layer.msg("修改成功");
+                                    }
+                                })
+
+                        }
+
+                    });
+
+                reloadSelect();
+
+
+            });
+    </script>
+}
+
+

@@ -1,0 +1,102 @@
+﻿@{
+   ViewBag.Title = "方法管理";
+}
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-inline">
+        <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn " lay-event="search">搜索</button>
+        <button class="layui-btn " lay-event="add">添加</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="deleteRow">删除</a>
+</script>
+
+@section scripts{
+    <script>
+        if (top.layer) {
+            top.layer.closeAll();
+        }
+        layui.use(['table', 'form'], function () {
+            var table = layui.table;
+            var $ = layui.$;
+            var form = layui.form;
+            //资源名称
+            var url_method = '/api/Methods'
+            var url_method_add = '/appPage/Method/Add'
+
+            //重新加载Table
+            window.reLoadTable=function () {
+
+                var where = {
+                    keyword: $("#keyword").val(),
+                }
+                table.reload('test', {
+                    where: where,
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    done: function () {
+                        $("#keyword").val(where.keyword)
+                    }
+                });
+            }
+            table.render({
+                elem: '#test'
+                , url: url_method
+                , toolbar: '#toolbarDemo'
+                , title: '数据源'
+                , cols: [[
+
+                    //  { type: 'checkbox', fixed: 'left' }
+                    { field: 'Id', title: '编号', width: 70,  align: 'center', fixed: 'left' },
+                    { field: 'MethodName', title: '方法名称', minWidth: 200, align: 'center' },
+                    { field: 'Description', title: '方法描述', minWidth: 200,  align: 'center' },
+                    { field: 'AssemblyPath', title: '程序集',  align: 'center' },
+                    { field: 'TypeFillName', title: '类型全名', align: 'center' },
+                    { field: 'IsStatic', title: '静态否', align: 'center' },
+                    { fixed: 'right', width: 80, title: '操作', fixed: 'right', toolbar: '#barDemo'}
+                ]]
+                , page: true
+            });
+
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                    case 'search':
+                        reLoadTable();
+                        break;
+                    case 'add':
+
+                        var width = window.innerWidth > 800 ? '800px': '90%';
+                        var height = window.innerWidth > 494 ? '494px': '90%';
+
+                        layer.open({
+                            type: 2,
+                            title: '添加方法',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: [width, height],
+                            content: url_method_add //iframe的url
+                        });
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'deleteRow') {
+
+                }
+            });
+
+        });
+    </script>
+}
+
