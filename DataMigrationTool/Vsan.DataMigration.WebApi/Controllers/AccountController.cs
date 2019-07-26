@@ -5,7 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Mvc;
+using Vsan.Common;
+using Vsan.Common.Safety;
 using Vsan.DataMigration.Models;
+using JsonResult = System.Web.Mvc.JsonResult;
 
 namespace Vsan.DataMigration.WebApi.Controllers
 {
@@ -19,7 +22,7 @@ namespace Vsan.DataMigration.WebApi.Controllers
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult  Login()
+        public ActionResult Login()
         {
             return View();
         }
@@ -27,16 +30,30 @@ namespace Vsan.DataMigration.WebApi.Controllers
 
         #region 验证码
 
-            /// <summary>
-            /// 发送验证码
-            /// </summary>
-            /// <param name="account"></param>
-            /// <returns></returns>
+        /// <summary>
+        /// 发送验证码
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult SendVerifyCode(UserAccount param)
         {
             return Json(SendVerifyCodeToEmail(param));
         }
+
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SendVerifyCode()
+        {
+            var vCode = new Random().Next(1000, 9999).ToString();
+            Session["VCode"] = vCode;
+            var ms= VerifyerCode.CreateValidateGraphic2(vCode,200,100);
+            return File(ms,"image/png");
+        }
+
         #endregion
 
         #region 登录 or 注册
@@ -62,7 +79,7 @@ namespace Vsan.DataMigration.WebApi.Controllers
                     //注册流程
                     //验证账号
                     var vCode = MeCache<string>.Get(string.Format(MeCacheKey.EmailVerifyCode, param));
-                    if ( string.IsNullOrWhiteSpace(vCode))
+                    if (string.IsNullOrWhiteSpace(vCode))
                     {
                         var json = SendVerifyCodeToEmail(param);
                         return SendVerifyCode(param);
@@ -122,13 +139,15 @@ namespace Vsan.DataMigration.WebApi.Controllers
             return new ReturnResult(0, "验证码已发送至你的邮箱，请查收");
         }
 
-            /// <summary>
-            /// 设置缓存
-            /// </summary>
-            /// <param name="user_account"></param>
-            /// <param name="token"></param>
-            /// <returns></returns>
-            private static UserInfo SetCache(user_account user_account, string token)
+
+
+        /// <summary>
+        /// 设置缓存
+        /// </summary>
+        /// <param name="user_account"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private static UserInfo SetCache(user_account user_account, string token)
         {
             var userInfo = new UserInfo
             {

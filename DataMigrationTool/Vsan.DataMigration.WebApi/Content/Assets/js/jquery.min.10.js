@@ -1,4 +1,4 @@
-﻿layui.config({ base: "/Assets/js/" }).use(["form", "layer"], function () {
+﻿layui.config({ base: "/Content/Assets/js/" }).use(["form", "layer"], function () {
     var d = layui.form,
         b = parent.layer === undefined ? layui.layer : parent.layer,
         e = layui.jquery;
