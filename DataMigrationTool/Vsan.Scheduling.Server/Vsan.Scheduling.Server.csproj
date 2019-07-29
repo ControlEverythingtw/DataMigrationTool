@@ -219,9 +219,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Sms\Common.Sms.csproj">
-      <Project>{88566991-EF66-4691-A7C0-4BB70A889F4B}</Project>
-      <Name>Common.Sms</Name>
+    <ProjectReference Include="..\Vsan.Common\Vsan.Common.csproj">
+      <Project>{504a89ee-0c0f-4492-a3ff-fec7fdd54b54}</Project>
+      <Name>Vsan.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
