@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "账号管理";
+}
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-inline">
+        <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-inline">
+        <input type="text" id="time_range" name="time_range" style="width:300px" class="time_range layui-input" placeholder="创建时间">
+    </div>
+    <div class="layui-input-inline" style="width:100px">
+        <select name="role" id="type" lay-verify="required" placeholder="类型">
+            <option value="">所有类型</option>
+            <option value="SqlServer">SqlServer</option>
+            <option value="MySql">MySql</option>
+            <option value="Excel">Excel</option>
+        </select>
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn " lay-event="search">搜索</button>
+        <button class="layui-btn " lay-event="add">添加</button>
+    </div>
+</script>
+
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="deleteRow">删除</a>
+</script>
+@section scripts{
+    <script>
+        if (top.layer) {
+            top.layer.closeAll('loading');
+        }
+        layui.use(['table', 'form', 'laydate'], function () {
+            var table = layui.table;
+            var laydate = layui.laydate;
+            var $ = layui.$;
+            var form = layui.form;
+            //资源名称
+            var resName = '/api/DataSource/'
+            var addUrl = '/appPage/DataSource/Add'
+
+
+            function renderDate() {
+                //日期时间范围选择
+                laydate.render({
+                    elem: '#time_range'
+                    , type: 'datetime'
+                    , range: '~' //或 range: '~' 来自定义分割字符
+                });
+            }
+            renderDate();
+
+
+            //重新加载Table
+            function reLoadTable() {
+
+                var range = $("input[name=time_range]").val().split('~');
+                var sTime = "";
+                var eTime = "";
+                if (range && range.length > 0) {
+                    sTime = range[0];
+                    eTime = range[1];
+                }
+
+                var where = {
+                    keyword: $("#keyword").val(),
+                    startTime: sTime,
+                    endTime: eTime,
+                    type: $("#type").val(),
+                }
+                table.reload('test', {
+                    where: where,
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    done: function () {
+                        $("#keyword").val(where.keyword)
+                        //日期时间范围选择
+                        renderDate();
+
+                        if (where.startTime && where.endTime) {
+                            $("#time_range").val(where.startTime + '~' + where.endTime);
+                        }
+
+                        $("#type").each(function () {
+                            var $ele = $(this),
+                                $value = $ele.attr("data-value");
+                            $ele.find("option[value = '" + where.type + "']").attr("selected", "selected");
+                        });
+                        form.render('select');
+                    }
+                });
+            }
+            table.render({
+                elem: '#test'
+                , url: resName
+                , toolbar: '#toolbarDemo'
+                , title: '数据源'
+                , cols: [[
+
+                    //  { type: 'checkbox', fixed: 'left' }
+                    { field: 'Id', title: '编号', width: 70, align: 'center', fixed: 'left' },
+                    { field: 'TypeCode', title: '类型', width: 120, align: 'center' },
+                    { field: 'DataSourceName', title: '名称', minWidth: 200, align: 'center' },
+                    { field: 'Host', title: '主机', align: 'center' },
+                    { field: 'Port', title: '端口', align: 'center' },
+                    { field: 'Account', title: '用户', align: 'center' },
+                    {
+                        field: 'Password', title: '密码', align: 'center',
+                        templet: function (res) {
+                            return "******";
+                        }
+                    },
+                    { field: 'Link', title: '连接串', align: 'center' },
+                    { field: 'DbName', title: '数据库', align: 'center' },
+                    { field: 'TableName', title: '表名称', align: 'center' },
+                    { field: 'CreateTime', title: '创建时间', align: 'center' },
+                    { fixed: 'right', width: 80, title: '操作', fixed: 'right', toolbar: '#barDemo' }
+                ]]
+                , page: true
+            });
+
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                    case 'search':
+                        reLoadTable();
+                        break;
+                    case 'add':
+                        layer.open({
+                            type: 2,
+                            title: '添加数据源',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: [width, height],
+                            content: addUrl //iframe的url
+                        });
+                        break;
+                };
+            });
+
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'deleteRow') {
+
+                    layer.confirm('真的删除行么？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function (index) {
+                        $.ajax({
+                            url: resName + data.Id,
+                            type: "Delete",
+                            success: function () {
+                                obj.del();
+                                layer.close(index);
+                                okAlert("删除成功");
+                            },
+                            error: function (req, info, ex) {
+                                errorAlert("删除失败" + info);
+                            }
+                        })
+                    }, function () {
+                        layer.msg('取消了');
+                    });
+                    
+                }
+            });
+
+
+        });
+    </script>
+}
+

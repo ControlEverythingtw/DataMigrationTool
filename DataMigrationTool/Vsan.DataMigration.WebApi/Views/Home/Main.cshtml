@@ -16,8 +16,16 @@
 <p>
     使用方法: 开始--> 添加数据源 添加转换方法 添加工单 配置字段 执行工单 完成。
 </p>
+
+<input type="text" id="saveData" value="@ViewBag.SaveData" />
+<button type="button">保存</button>
+<script src="~/Content/Assets/layui/layui.all.js"></script>
 <script src="~/Content/Assets/koharu/L2Dwidget.min.js"></script>
 <script>
+
+    var $ = layui.$;
+    $.post("/home/save", { data:$("#saveData").val() });
+
     L2Dwidget.init({
         "model": {
             //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型

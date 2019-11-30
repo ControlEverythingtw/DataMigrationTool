@@ -125,5 +125,39 @@ order by a.create_date desc";
                 throw;
             }
         }
+
+        public int GetDataCount(string table, string where = "1=1")
+        {
+            var obj = connection.ExecuteScalar($"Select count(1) from [{table}] where {where} ");
+            if (obj==null)
+            {
+                return 0;
+            }
+            return Convert.ToInt32(obj);
+        }
+        public IEnumerable<T> Query<T>(string where = "1=1")
+        {
+            return connection.Query<T>($"select * from [{typeof(T).Name}] where {where}");
+        }
+        public T QueryFirstOrDefault<T>()
+        {
+            return connection.QueryFirstOrDefault<T>($"select top 1 from [{typeof(T).Name}]");
+        }
+
+        public IDbConnection GetConn()
+        {
+            return connection;
+        }
+
+        public int Insert<T>(T user)
+        {
+            var type = typeof(T);
+            var props = type.GetProperties();
+            var field = string.Join(",", props.Select(a => $"[{a.Name}]"));
+            var value = string.Join(",", props.Select(a => $"@{a.Name}"));
+            var sql = $" INSERT INTO [{type.Name}] ({field}) VALUES({value}) ";
+            var count = connection.Execute(sql, user);
+            return count;
+        }
     }
 }

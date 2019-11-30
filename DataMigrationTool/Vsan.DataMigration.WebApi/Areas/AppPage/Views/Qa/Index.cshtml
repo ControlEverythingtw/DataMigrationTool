@@ -1,0 +1,309 @@
+﻿@{
+    ViewBag.Title = "变量管理";
+}
+
+<div class="layui-tab">
+    <ul class="layui-tab-title">
+        <li class="layui-this">变量组管理</li>
+        <li>计算</li>
+        <li id="look_score">结果</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <table class="layui-hide" id="test" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-inline">
+                    <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn " lay-event="search">搜索</button>
+                    <button class="layui-btn " lay-event="add">添加</button>
+                </div>
+            </script>
+        </div>
+        <div class="layui-tab-item">
+            <div id="showEdit">
+                <div style="margin:10px 30px 10px -10px; ">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">用户名称</label>
+                            <div class="layui-input-block">
+                                <textarea name="UserName" placeholder="请输入名称" required lay-verify="required"  class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label my-label">变量组</label>
+                            <div class="layui-input-block" id="type_input_box">
+                                <select name="Select_Group" lay-filter="Select_Group" lay-verify="required"  id="Select_Group" lay-search="">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">变量</label>
+                            <div class="layui-input-block" id="test1"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <table class="layui-hide" id="QA_score" lay-filter="QA_score"></table>
+            <script type="text/html" id="QA_score_toolbar">
+                <div class="layui-inline">
+                    <input type="text" name="keyword" id="keyword" placeholder="请输入查询关键字" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn " lay-event="search">搜索</button>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-primary " lay-event="editVar">编辑变量</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="deleteRow">删除</a>
+</script>
+
+@section scripts{
+    <script>
+        if (top.layer) {
+            top.layer.closeAll();
+        }
+        layui.use(['table', 'form', 'element', 'tree', 'util'], function () {
+            var table = layui.table;
+            var $ = layui.$;
+            var form = layui.form;
+            var tree = layui.tree, util = layui.util;
+
+
+            //资源名称
+            var url_method = '/api/QuerstionGroup'
+            var url_score = '/api/score'
+            var url_method_add = '/appPage/Qa/AddQuerstionGroup'
+            var url_method_edit = '/appPage/Qa/EditQuerstions'
+            var url_Querstion = '/api/Querstion/';
+            var url_GetQuerstionGroup = '/api/QuerstionGroup/GetSelectOption';
+            var url_Answer = '/api/Answer'
+
+            var inst1  = tree.render({
+                elem: '#test1'  //绑定元素
+                , showCheckbox: true
+                , id: 'demoId1' //定义索引
+                , isJump: true //是否允许点击节点时弹出新窗口跳转
+                , click: function (obj) {
+                    var data = obj.data;  //获取当前点击的节点数据
+                    layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                }
+            });
+
+            var Select_Group_Name = '';
+
+            function render_tree(tz_id) {
+
+                $.get(url_Querstion + "?id=" + tz_id, function (res) {
+                    //渲染
+                    tree.reload('demoId1',{
+                         data: res
+                    });
+                })
+            }
+
+            function render_Select_Group() {
+                renderSelect('Select_Group', url_GetQuerstionGroup, {
+                    callBack: function (data) {
+                        form.render('select');
+                    },
+                })
+            }
+            render_Select_Group();
+         
+            form.on('select(Select_Group)', function (data) {
+                render_tree(data.value);
+                console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象
+                Select_Group_Name = '';
+            });
+
+
+
+            form.render();
+
+
+            function GetIds(data,ids) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i].id;
+                    ids.push(item.id);
+                    if (item.children.length <= 0) {
+                        return true;
+                    }
+                    GetIds(item.children, ids);
+                }
+            }
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.load();
+                var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据
+                console.log(checkedData);
+                if (checkedData.length <= 0) {
+                    errorAlert("至少选择一个变量");
+                    return false;
+                }
+                data.field["SelectVar"] = JSON.stringify(checkedData);
+                $.post(url_Answer, data.field, function (res) {
+                    okAlert("提交成功");
+                    $("#look_score").click();
+                    reLoadTable_QA_score();
+                    layer.closeAll('loading');
+                }).error(function (r, s, c) {
+                    errorAlert("添加失败 :" + r.responseText);
+                    layer.closeAll('loading');
+                });
+
+                return false;
+            });
+
+
+            //重新加载Table
+            window.reLoadTable = function () {
+                var where = {
+                    keyword: $("#keyword").val(),
+                }
+                table.reload('test', {
+                    where: where,
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    done: function () {
+                        $("#keyword").val(where.keyword)
+                        render_Select_Group();
+                    }
+                });
+                
+            }
+            table.render({
+                elem: '#test'
+                , url: url_method
+                , toolbar: '#toolbarDemo'
+                , title: '数据源'
+                , cols: [[
+                    //  { type: 'checkbox', fixed: 'left' }
+                    { field: 'Id', title: '编号', width: 200, align: 'center', fixed: 'left' },
+                    { field: 'Name', title: '名称', minWidth: 200, align: 'center' },
+                    { field: 'CreateTime', title: '创建时间', minWidth: 200, align: 'center' },
+                    { fixed: 'right', width: 150, title: '操作', fixed: 'right', toolbar: '#barDemo' }
+                ]]
+                , page: true
+            });
+
+            //头工具栏事件
+            table.on('toolbar(test)', function (obj) {
+
+                switch (obj.event) {
+                    case 'search':
+                        reLoadTable();
+                        break;
+                    case 'add':
+                        var width = window.innerWidth > 800 ? '800px' : '90%';
+                        var height = window.innerWidth > 494 ? '494px' : '90%';
+                        layer.open({
+                            type: 2,
+                            title: '添加组',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: [width, height],
+                            content: url_method_add //iframe的url
+                        });
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'deleteRow') {
+                    $.ajax({
+                        method: "Delete",
+                        url: url_method + "?id=" + data.Id,
+                        success: function (res) {
+                            okAlert("删除成功", function () {
+                                reLoadTable();
+                            });
+                        },
+                        error: function (r, s, c) {
+                            errorAlert("添加失败 :" + r.responseText);
+                        }
+                    });
+
+                }
+                if (obj.event === 'editVar') {
+                    var width = '90%';
+                    var height = '90%';
+                    window.tz_id = data.Id;
+                    layer.open({
+                        type: 2,
+                        title: '编辑变量',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: [width, height],
+                        content: url_method_edit //iframe的url
+                    });
+                }
+            });
+
+
+            //重新加载Table
+            window.reLoadTable_QA_score = function () {
+                var where = {
+                    keyword: $("#keyword_QA_score").val(),
+                }
+                table.reload('QA_score', {
+                    where: where,
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    done: function () {
+                        $("#keyword_QA_score").val(where.keyword)
+                    }
+                });
+            }
+            table.render({
+                elem: '#QA_score'
+                , url: url_score
+                , toolbar: '#QA_score_toolbar'
+                , title: '数据源'
+                , cols: [[
+                    //  { type: 'checkbox', fixed: 'left' }
+                    { field: 'CreateTime', title: '时间', minWidth: 100, align: 'center', fixed: 'left' },
+                    { field: 'CreaterName', title: '用户', minWidth: 200, align: 'center' },
+                    { field: 'tz_name', title: '名称', minWidth: 100, align: 'center' },
+                    { field: 'score', title: '值', minWidth: 200, align: 'center' },
+                  
+                ]]
+                , page: true
+            });
+
+            //头工具栏事件
+            table.on('toolbar(QA_score)', function (obj) {
+                switch (obj.event) {
+                    case 'search':
+                        reLoadTable_QA_score();
+                        break;
+                };
+            });
+        });
+    </script>
+}
+

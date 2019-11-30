@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -23,7 +26,7 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <div id="videoBox" hidden>
+    <div id="videoBox" >
         <video class="video-player" preload="auto" autoplay="autoplay" loop="loop" data-height="1080" data-width="1920" height="1080" width="1920">
             <source src="/Content/Assets/login.mp4" type="video/mp4">
         </video>
@@ -33,25 +36,45 @@
         <h1>登录</h1>
         <form class="layui-form">
             <div class="layui-form-item">
-                <input class="layui-input" name="uName" placeholder="用户名" lay-verify="required" type="text" autocomplete="off">
+                <input class="layui-input" name="Account" placeholder="邮箱" lay-verify="required" type="text" autocomplete="off">
             </div>
             <div class="layui-form-item">
-                <input class="layui-input" name="uPwd" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
+                <input class="layui-input" name="Password" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
             </div>
             <div class="layui-form-item form_code">
-                <input class="layui-input" name="vCode" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
+                <input class="layui-input" name="VerifyCode_Image" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
                 <div class="code">
-                    <img src="/Login/GetVCode" id="vCode" width="116" height="36" title="点击更换验证码">
+                    <img src="/Account/VerifyCode?width=116&height=36" id="vCode" width="116" height="36" title="点击更换验证码">
                 </div>
             </div>
             <button id="login_btn" class="layui-btn login_btn" lay-submit="" lay-filter="login">登录</button>
             <div style="width:100% ;text-align:center;">
-                <a href="/Login/FindPwd">找回密码</a>
+                <a href="/Account/Register">注册</a> <a href="/Account/FindPwd">找回密码</a>
             </div>
         </form>
     </div>
-    <script src="~/Content/Assets/layui/layui.js"></script>
-    <script src="~/Content/Assets/md5/md5.min.js"></script>
-    <script src="~/Content/Assets/js/jquery.min.10.js"></script>
+    <script src="~/Content/Assets/layui/layui.all.js"></script>
+    <script src="~/Content/Assets/js/CommonFun.js"></script>
+    <script>
+        var $ = layui.$;
+        var form = layui.form;
+
+        $("#vCode").click(function () {
+            $("#vCode").attr("src", "/Account/VerifyCode?width=116&height=36&r=" + Math.random());
+        });
+
+        form.on("submit(login)", function (data) {
+            layer.msg(JSON.stringify(data.field));
+            $.post("/Account/Login", data.field, function (res) {
+                if (res.code == 0) {
+                    window.location.href = "/Home/Index";
+                } else {
+                    errorAlert(res.message);
+                }
+            })
+            return false;
+        });
+
+    </script>
 </body>
 </html>

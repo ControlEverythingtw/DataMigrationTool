@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Param\AddCommentParam.cs" />
     <Compile Include="Param\AddFieldMappingParam.cs" />
+    <Compile Include="Param\AnswerParam.cs" />
     <Compile Include="Param\BatchOptionParam.cs" />
     <Compile Include="Param\DataSourceQueryParam.cs" />
     <Compile Include="Param\FieldsQueryParam.cs" />
@@ -91,6 +92,18 @@
       <DependentUpon>Vsan.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="qa_answer.cs">
+      <DependentUpon>Vsan.tt</DependentUpon>
+    </Compile>
+    <Compile Include="qa_questions.cs">
+      <DependentUpon>Vsan.tt</DependentUpon>
+    </Compile>
+    <Compile Include="qa_questions_group.cs">
+      <DependentUpon>Vsan.tt</DependentUpon>
+    </Compile>
+    <Compile Include="qa_score.cs">
+      <DependentUpon>Vsan.tt</DependentUpon>
+    </Compile>
     <Compile Include="role.cs">
       <DependentUpon>Vsan.tt</DependentUpon>
     </Compile>
@@ -110,6 +123,7 @@
     <Compile Include="View\FieldModel.cs" />
     <Compile Include="View\IQueryablePageResult.cs" />
     <Compile Include="View\MethodView.cs" />
+    <Compile Include="View\qa_questionsView.cs" />
     <Compile Include="View\TableModel.cs" />
     <Compile Include="Vsan.Context.cs">
       <AutoGen>True</AutoGen>

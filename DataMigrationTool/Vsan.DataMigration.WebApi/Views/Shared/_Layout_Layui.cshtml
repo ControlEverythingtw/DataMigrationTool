@@ -12,13 +12,15 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="icon" href="~/favicon.ico">
     <link href="~/Content/Assets/layui/css/layui.css" rel="stylesheet" />
-
+    @{ 
+        var ran = new Random().NextDouble();
+    }
 </head>
 <body >
     @RenderBody()
 
-    <script src="~/Content/Assets/layui/layui.js"></script>
-    <script src="~/Content/Assets/js/CommonFun.js?v=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
+    <script src="~/Content/Assets/layui/layui.js?v=@ran"></script>
+    <script src="~/Content/Assets/js/CommonFun.js?v=@ran"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

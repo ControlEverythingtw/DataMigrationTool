@@ -18,11 +18,22 @@ namespace Vsan.DataMigration.Models
         public string Account { get; set; }
 
         /// <summary>
-        /// 验证码或者密码
+        /// 邮箱验证码
+        /// </summary>
+        [MinLength(length:4)]
+        public string VerifyCode_Email { get; set; }
+        /// <summary>
+        /// 图形验证码
         /// </summary>
         [Required]
-        [MinLength(length:6)]
-        public string Code { get; set; }
+        [MinLength(length: 4)]
+        public string VerifyCode_Image { get; set; }
+        /// <summary>   
+        /// 密码
+        /// </summary>
+        [Required]
+        public string Password { get; set; }
 
+        public int UserId { get; set; }
     }
 }

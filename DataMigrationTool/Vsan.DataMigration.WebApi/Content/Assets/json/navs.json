@@ -50,6 +50,12 @@
     "spread": false,
     "children": [
       {
+        "title": "代码生成器",
+        "icon": "&#xe61c;",
+        "href": "/AppPage/CodeGenerater",
+        "spread": false
+      },
+      {
         "title": "表单生成器",
         "icon": "&#xe61c;",
         "href": "/AppPage/FromGenerater",
@@ -59,6 +65,12 @@
         "title": "流程设计器",
         "icon": "&#xe61c;",
         "href": "/AppPage/FromGenerater",
+        "spread": false
+      },
+      {
+        "title": "指标计算器",
+        "icon": "&#xe61c;",
+        "href": "/AppPage/Qa",
         "spread": false
       }
     ]

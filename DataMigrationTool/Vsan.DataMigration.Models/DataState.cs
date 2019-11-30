@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,14 @@ namespace Vsan.DataMigration.Models
         /// <summary>
         /// 已删除
         /// </summary>
-        Deleted=-1,
+        [Description("已删除")]
+        Deleted =-1,
 
         /// <summary>
         /// 正常
         /// </summary>
-        Normal=0,
+        [Description("正常")]
+        Normal =0,
 
 
 

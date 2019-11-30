@@ -38,5 +38,9 @@ namespace Vsan.DataMigration.Models
         public virtual DbSet<user_account> user_account { get; set; }
         public virtual DbSet<user_role_mapping> user_role_mapping { get; set; }
         public virtual DbSet<work_order> work_order { get; set; }
+        public virtual DbSet<qa_answer> qa_answer { get; set; }
+        public virtual DbSet<qa_questions_group> qa_questions_group { get; set; }
+        public virtual DbSet<qa_score> qa_score { get; set; }
+        public virtual DbSet<qa_questions> qa_questions { get; set; }
     }
 }

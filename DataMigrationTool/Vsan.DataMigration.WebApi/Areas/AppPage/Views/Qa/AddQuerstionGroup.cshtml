@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "添加组";
+}
+<div id="showEdit">
+    <div style="margin:10px 30px 10px -10px; ">
+        <form class="layui-form" action="">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">组名称</label>
+                <div class="layui-input-block">
+                    <textarea name="Name" placeholder="请输入名称" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var index = undefined;
+        if (parent.layer) {
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        }
+        layui.use(['form'], function () {
+            var $ = layui.$;
+            var form = layui.form;
+            var url_edit = '/api/QuerstionGroup/';
+
+            form.render();
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+              
+                $.post(url_edit, data.field, function (res) {
+                    okAlert("添加成功", function () {
+                        parent.layer.close(index);
+                        parent.reLoadTable();
+                    });
+                }).error(function (r, s, c) {
+                    errorAlert("添加失败 :" + r.responseText);
+                });
+
+                return false;
+            });
+
+            //$('#table_input_box input').on('keydown', function (e) {
+            //    console.log(e);
+            //});
+        })
+    </script>
+}
+
+

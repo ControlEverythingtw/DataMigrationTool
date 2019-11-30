@@ -10,5 +10,6 @@ namespace Vsan.DataMigration.Models
     {
         public static string 密码错误 = "密码错误";
         public static string 登录成功 = "登录成功";
+        public static string 验证码错误= "验证码错误";
     }
 }

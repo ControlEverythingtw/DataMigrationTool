@@ -1,0 +1,5 @@
+E:\DataMigrationTool\DataMigrationTool\DynamicMethods\bin\Release\DynamicMethods.dll
+E:\DataMigrationTool\DataMigrationTool\DynamicMethods\bin\Release\DynamicMethods.pdb
+E:\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Release\DynamicMethods.csproj.CoreCompileInputs.cache
+E:\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Release\DynamicMethods.dll
+E:\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Release\DynamicMethods.pdb

@@ -110,6 +110,15 @@ namespace Vsan.Common
             this.data = data;
         }
         /// <summary>
+        /// 构造
+        /// </summary>
+        public JsonDataModel( T data)
+        {
+            this.code = ResultCode.Success;
+            this.message = "Success";
+            this.data = data;
+        }
+        /// <summary>
         /// 错误码（0表示没有错误）
         /// </summary>
         public ResultCode code { get; set; }

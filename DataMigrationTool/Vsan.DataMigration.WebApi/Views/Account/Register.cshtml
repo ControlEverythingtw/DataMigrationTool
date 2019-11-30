@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>注册</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link href="~/Content/Assets/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/Assets/css/login.css" rel="stylesheet" />
+    <script>
+        if (window != top) { top.location.href = location.href; }
+    </script>
+</head>
+<body>
+    <!--[if lte IE 9]>
+    <p style="color:#f00;">你正在使用的浏览器<strong>过于陈旧</strong>，请 <a href="https://browsehappy.com/" target="_blank">升级浏览器</a>！如果您使用的是搜狗、360、遨游等双核浏览器，请切换到极速模式以获得更好的体验.</p> <![endif]-->
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <div id="videoBox">
+        <video class="video-player" preload="auto" autoplay="autoplay" loop="loop" data-height="1080" data-width="1920" style="width:100%;height:100%;">
+            <source src="/Content/Assets/register.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="video_mask"></div>
+    <div class="login" >
+        <h1>注册</h1>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <input class="layui-input" name="Account" placeholder="邮箱" lay-verify="required" type="text" autocomplete="off">
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" name="Password" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
+            </div>
+            <div class="layui-form-item form_code">
+                <input class="layui-input" name="VerifyCode_Email" placeholder="邮箱验证码" lay-verify="required" type="password" autocomplete="off">
+                <div class="code">
+                    <input class="layui-btn layui-btn-warm " type="button"  style="width:115px"   value="获取验证码" id="btn_get_email_code" />
+                </div>
+            </div>
+            <div class="layui-form-item form_code" hidden>
+                <input class="layui-input" name="VerifyCode_Image" value="ffff" placeholder="图形验证码" lay-verify="required" type="text" autocomplete="off">
+                <div class="code">
+                    <img src="/Account/VerifyCode?width=116&height=36" id="vCode" width="116" height="36" title="点击更换验证码">
+                </div>
+            </div>
+            <button id="login_btn" class="layui-btn login_btn" lay-submit="" lay-filter="register">注册</button>
+            <div style="width:100% ;text-align:center;">
+                <a href="/Account/Login">登录</a> <a href="/Account/FindPwd">找回密码</a>
+            </div>
+        </form>
+    </div>
+    <script src="~/Content/Assets/layui/layui.all.js"></script>
+    <script src="~/Content/Assets/js/CommonFun.js"></script>
+    <script>
+        var $ = layui.$;
+        var form = layui.form;
+
+        $("#vCode").click(function () {
+            $("#vCode").attr("src", "/Account/VerifyCode?width=116&height=36&r=" + Math.random());
+        });
+
+        var $btn_get_email_code = $("#btn_get_email_code");
+        var i = 59;
+
+        $btn_get_email_code.click(function () {
+
+            if (i!=59) {
+                return false;
+            }
+
+            var email = $("input[name=Account]").val();
+
+            if (email=='') {
+                errorAlert("邮箱不能为空");
+                return false;
+            }
+            var pattern = /^[A-Za-z0-9\u4e00-\u9fa5]+@@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if (!pattern.test(email)) {
+                errorAlert("邮箱格式不正确");
+                return false;
+            }
+
+            $.post("/Account/SendVerifyCode",
+                {
+                    Account: email ,
+                    VerifyCode_Image: $("input[name=VerifyCode_Image]").val(),
+                    Password: +new Date()
+                }, function (res) {
+                    if (res.code == 0) {
+                        okAlert(res.message);
+                    } else {
+                        errorAlert(res.message);
+                    }
+                }).error(function (x, y, z) {
+
+                    var data = {
+                        x: x,
+                        y: y,
+                        z: z
+                    }
+                    var msg = JSON.stringify(data);
+                    errorAlert(msg);
+                });
+            $btn_get_email_code.val("59s");
+            $btn_get_email_code.addClass("layui-disabled");
+            $btn_get_email_code.attr("disabled","true");
+            var index = setInterval(function () {
+               i--;
+                $btn_get_email_code.val(i + "s");
+               if (i == 0) {
+                   clearInterval(index);
+                   $btn_get_email_code.val("获取验证码");
+                   $btn_get_email_code.removeClass("layui-disabled");
+                   $btn_get_email_code.removeAttr("disabled");
+                   i = 59;
+                }
+            }, 1000);
+
+        });
+        form.on("submit(register)", function (data) {
+            layer.msg(JSON.stringify(data.field));
+            $.post("/Account/Register", data.field, function (res) {
+                if (res.code == 0) {
+                    layer.confirm("恭喜您注册成功，马上去登录吧！", function (x) {
+                        window.location.href = "/Account/Login";
+                    });
+                } else {
+                    errorAlert(res.message);
+                }
+            })
+            return false;
+        });
+
+    </script>
+</body>
+</html>
+
+

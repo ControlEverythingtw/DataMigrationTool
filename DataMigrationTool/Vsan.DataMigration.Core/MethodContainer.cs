@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Vsan.DataMigration.Core
         {
            return  _Cache.GetOrAdd(id, (i) =>
            {
-               var filePath = AppDomain.CurrentDomain.BaseDirectory + "App_Data/Upload/user1001/" + dllFileName;
+               var filePath = AppDomain.CurrentDomain.BaseDirectory + "App_Data/Upload/user1001/" + Path.GetFileName(dllFileName);
                 //加载程序集(dll文件地址)，使用Assembly类   
                 Assembly assembly = Assembly.LoadFile(filePath);
                 //获取类型，参数（名称空间+类）   

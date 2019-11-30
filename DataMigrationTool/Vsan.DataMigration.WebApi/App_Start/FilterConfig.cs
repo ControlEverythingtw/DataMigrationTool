@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Vsan.DataMigration.WebApi.Filter;
 
 namespace Vsan.DataMigration.WebApi
 {
@@ -7,7 +8,7 @@ namespace Vsan.DataMigration.WebApi
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new MvcExceptionHandler());
         }
     }
 }

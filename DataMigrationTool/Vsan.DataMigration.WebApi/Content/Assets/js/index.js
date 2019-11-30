@@ -12,6 +12,17 @@ layui.config({
             
     });
 
+    $("#signOut").click(function () {
+
+        layer.confirm("确定退出登录吗?", function (x) {
+            $.post("/Account/SignOut");
+            setTimeout(function () {
+                window.location.href = "/Account/Login";
+            }, 1000);
+        });
+
+    });
+
 	//更换皮肤
 	function skins(){
 		var skin = window.sessionStorage.getItem("skin");

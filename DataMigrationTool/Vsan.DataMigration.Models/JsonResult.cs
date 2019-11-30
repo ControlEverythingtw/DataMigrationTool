@@ -38,6 +38,11 @@ namespace Vsan.DataMigration.Models
             code = 0,
             message = "success"
         };
+        public static object NotExist { get; set; } = new ReturnResult
+        {
+            code = 404,
+            message = "不存在"
+        };
 
         public static ReturnResult GetOk(object data)
         {
@@ -56,6 +61,15 @@ namespace Vsan.DataMigration.Models
                 code = 1,
                 message = "Fail",
                 data = data,
+            };
+        }
+
+        public static ReturnResult IsExist()
+        {
+            return new ReturnResult
+            {
+                code = 2,
+                message = "已存在",
             };
         }
     }

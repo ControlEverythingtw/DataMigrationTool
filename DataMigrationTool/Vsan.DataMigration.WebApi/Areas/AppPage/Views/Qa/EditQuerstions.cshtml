@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "编辑变量";
+}
+<div id="showEdit">
+    <div style="margin:10px 30px 10px -10px; ">
+        <div class="layui-row">
+            <div class="layui-col-md6" >
+                <div style="height:500px">
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">变量</label>
+                        <div class="layui-input-block" id="test1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div style="height:500px;width:500px;position:fixed;top:10px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">上级</label>
+                            <div class="layui-input-block">
+                                <input name="parent" disabled placeholder="默认顶级" class="layui-input layui-disabled" />
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label"></label>
+                            <button class="layui-btn layui-btn-danger" style="display:none" id="del_select">删除节点</button>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">变量名称</label>
+                            <div class="layui-input-block">
+                                <input name="text" placeholder="请输入变量名称" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">分数</label>
+                            <div class="layui-input-block">
+                                <input name="score" placeholder="请输入分数" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        Array.prototype.indexOf = function (user) {
+            for (var i = 0; i < this.length; i++) if (this[i] == user) return i;
+            return -1;
+        };
+        Array.prototype.remove = function (user) {
+            var index = this.indexOf(user);
+            if (index > -1) this.splice(index, 1);
+        };
+
+        var index = undefined;
+        if (parent.layer) {
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        }
+        layui.use(['form','tree'], function () {
+            var $ = layui.$;
+            var form = layui.form;
+            var url_edit = '/api/Querstion/';
+
+            var tree = layui.tree;
+
+            var id_parent_check = '';
+            var id_selects =[];
+
+            if (parent.tz_id == '') {
+                errorAlert("题组编号不能为空");
+            }
+            var inst1 = {};
+
+            function render_tree() {
+                $.get(url_edit + "?id=" + parent.tz_id, function (res) {
+                    //渲染
+                    inst1 = tree.render({
+                        elem: '#test1'  //绑定元素
+                        , id: 'demoId' //定义索引
+                        , showCheckbox: true
+                        , data: res
+                        , oncheck: function (obj) {
+                            console.log(obj.data); //得到当前点击的节点数据
+                            if (obj.checked) {
+                                id_parent_check = obj.data.id;
+                                id_selects.push(id_parent_check);
+                                $("input[name=parent]").val(obj.data.id+'_'+obj.data.title);
+
+                            } else if (obj.data.id == id_parent_check) {
+                                id_selects.push(id_parent_check);
+                                id_selects.remove(id_parent_check);
+                                id_parent_check = '';
+                                $("input[name=parent]").val(id_parent_check);
+                            }
+                           
+                            
+                            if (id_selects.length>0) {
+                                $("#del_select").show();
+                            } else {
+                                $("#del_select").hide();
+                            }
+                        }
+                    });
+                   
+                   
+                })
+            }
+            render_tree();
+
+            var reset_tree = function () {
+                id_selects = [];
+                $("#del_select").hide();
+                render_tree();
+            }
+
+            form.render();
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                if (id_parent_check != '') {
+                    data.field['parent'] = id_parent_check;
+                } 
+                data.field['tz_id'] = parent.tz_id ;
+
+                $.post(url_edit, data.field, function (res) {
+                    reset_tree();
+                }).error(function (r, s, c) {
+                    errorAlert("添加失败 :" + r.responseText);
+                });
+
+                return false;
+            });
+
+            
+
+            $("#del_select").click(function () {
+                var ids= id_selects.join(',');
+                $.ajax({
+                    method: "Delete",
+                    url: url_edit + "?id=" +ids,
+                    success: function (res) {
+                        reset_tree();
+                        okAlert("删除成功");
+                    },
+                    error: function (r, s, c) {
+                        errorAlert("添加失败 :" + r.responseText);
+                    }
+                });
+
+            });
+          
+        })
+    </script>
+}
+
+

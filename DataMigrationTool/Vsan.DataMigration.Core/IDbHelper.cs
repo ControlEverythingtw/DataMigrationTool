@@ -11,6 +11,7 @@ namespace Vsan.DataMigration.Core
 {
     public interface IDbHelper:IDisposable
     {
+     
 
         /// <summary>
         /// 设置链接串
@@ -19,11 +20,46 @@ namespace Vsan.DataMigration.Core
         void SetLink(string link);
 
         /// <summary>
+        /// 获取数据行数
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        int GetDataCount(string table, string where = "1=1");
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        IDbConnection GetConn();
+
+        /// <summary>
+        /// 查询第一行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T QueryFirstOrDefault<T>();
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IEnumerable<T> Query<T>(string where="1=1");
+
+        /// <summary>
         /// 获取某个数据库下的所有表
         /// </summary>
         /// <param name="dbName"></param>
         /// <returns></returns>
         IEnumerable<TableModel> GetTables(string dbName);
+
+        /// <summary>
+        /// 插入
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        int Insert<T>(T user);
 
 
         /// <summary>
