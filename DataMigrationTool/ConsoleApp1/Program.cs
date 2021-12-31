@@ -11,7 +11,72 @@ namespace ConsoleApp1
 {
     class Program
     {
+        static Class2 class2 = new Class2();
+
         static void Main(string[] args)
+        {
+            //UpdateField();
+
+
+            class2.Start("x");
+            class2.Dispose();
+            class2 = new Class2();
+            class2.Start("y");
+
+
+
+            Console.WriteLine("完成");
+            Console.ReadLine();
+        }
+
+        private static void Class1_OnDataUpdate()
+        {
+            Console.WriteLine("Class1_OnDataUpdate");
+        }
+
+        private static void UpdateField()
+        {
+            var database = "IPTS_PermissionDB";
+            var oldValue = "ATL_MTW20_INJ";
+            var newValue = "ATL_MTW60_INJ";
+            var fieldName = "Factory";
+            //var ip = "127.0.0.1";
+            var ip = "192.168.50.250";
+
+            var dbType = "MySql";
+            var connString = $"server={ip};database=IPTS_PermissionDB;uid=root;pwd=Supercncy.;Persist Security Info=True;Charset=utf8;";
+            var db1 = DbFactory.GetDbHelper(dbType, connString);
+            UpdateAllTableField(database, oldValue, newValue, fieldName, db1);
+
+            var count = db1.ExecuteNonQuery($"update Sys_Factory set FCode='{newValue}',FName='{newValue}' where iden='1'");
+            if (count > 0)
+            {
+                Console.WriteLine($"表Sys_Factory更新成功,影响行数:{count}");
+            }
+
+            var connString2 = $"server={ip};database=IPTSDB;uid=root;pwd=Supercncy.;Persist Security Info=True;Charset=utf8;";
+            var db2 = DbFactory.GetDbHelper(dbType, connString2);
+            UpdateAllTableField("IPTSDB", oldValue, newValue, fieldName, db2);
+        }
+
+        private static void UpdateAllTableField(string database, string oldValue, string newValue, string fieldName, IDbHelper db)
+        {
+            var tables = db.GetTables(database).Where(a=>!a.TableName.StartsWith("v_"));
+            foreach (var table in tables)
+            {
+                var fields = db.GetFields(table.TableName);
+                if (fields.Any(a => a.FieldName == fieldName))
+                {
+                    var count = db.ExecuteNonQuery($"Update {table.TableName} set {fieldName}='{newValue}' where {fieldName}='{oldValue}'");
+                    if (count > 0)
+                    {
+                        Console.WriteLine($"表{table.TableName}更新成功,影响行数:{count}");
+                    }
+                }
+            }
+        }
+
+        private static void NewMethod()
         {
             var gwyAdmin = DbFactory.GetDbHelper("SqlServer", "Data Source = 119.23.68.66,1433,1433; Initial Catalog =Gwy_Admin; User Id = sa; Password = IbdP16; ");
             var testDb = DbFactory.GetDbHelper("SqlServer", "Data Source = 119.23.68.66,1433,1433; Initial Catalog =test; User Id = sa; Password = IbdP16; ");
@@ -19,14 +84,11 @@ namespace ConsoleApp1
 
 
 
-          
+
 
 
 
             //UpdateCmsshop(gwyAdmin, testDb);
-
-            Console.WriteLine("完成");
-            Console.ReadLine();
         }
 
         private static void UpdateCmsshop(IDbHelper gwyAdmin, IDbHelper testDb)

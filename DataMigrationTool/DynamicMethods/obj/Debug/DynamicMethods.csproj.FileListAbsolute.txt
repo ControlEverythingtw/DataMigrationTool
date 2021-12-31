@@ -10,3 +10,8 @@ K:\003深圳市工务园网络科技有限公司\DataMigrationTool\DataMigration
 K:\003深圳市工务园网络科技有限公司\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.csproj.CoreCompileInputs.cache
 K:\003深圳市工务园网络科技有限公司\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.dll
 K:\003深圳市工务园网络科技有限公司\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.pdb
+E:\Projects\DataMigrationTool\DataMigrationTool\DynamicMethods\bin\Debug\DynamicMethods.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\DynamicMethods\bin\Debug\DynamicMethods.pdb
+E:\Projects\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.pdb
+E:\Projects\DataMigrationTool\DataMigrationTool\DynamicMethods\obj\Debug\DynamicMethods.csprojResolveAssemblyReference.cache

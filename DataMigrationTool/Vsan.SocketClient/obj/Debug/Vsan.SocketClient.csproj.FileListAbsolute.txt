@@ -1,0 +1,7 @@
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\bin\Debug\Vsan.SocketClient.exe.config
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\bin\Debug\Vsan.SocketClient.exe
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\bin\Debug\Vsan.SocketClient.pdb
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\obj\Debug\Vsan.SocketClient.csprojAssemblyReference.cache
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\obj\Debug\Vsan.SocketClient.csproj.CoreCompileInputs.cache
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\obj\Debug\Vsan.SocketClient.exe
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketClient\obj\Debug\Vsan.SocketClient.pdb

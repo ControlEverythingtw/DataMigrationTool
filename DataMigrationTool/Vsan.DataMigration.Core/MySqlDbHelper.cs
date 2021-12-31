@@ -29,6 +29,7 @@ namespace Vsan.DataMigration.Core
             Open();
         }
         public void Dispose()
+
         {
             if (connection!=null&&connection.State== ConnectionState.Open)
             {
@@ -49,7 +50,7 @@ namespace Vsan.DataMigration.Core
         public IEnumerable<FieldModel> GetFields(string tableName)
         {
            
-            var table_schema = link.Split(';').Where(a=>a.Contains("Database")).FirstOrDefault().Split('=')[1].Trim();
+            var table_schema = link.ToLower().Split(';').Where(a=>a.Contains("database")).FirstOrDefault().Split('=')[1].Trim();
 
             var sql = @"select Table_Name TableName,Column_Name FieldName , Column_COMMENT FieldComment, Column_Type  FieldType ,CHARACTER_OCTET_LENGTH FieldLength from information_schema.COLUMNS where table_name=@table_name and table_schema=@table_schema";
 

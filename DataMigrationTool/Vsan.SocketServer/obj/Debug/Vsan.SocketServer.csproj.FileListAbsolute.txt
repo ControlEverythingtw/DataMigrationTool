@@ -1,0 +1,16 @@
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\Vsan.SocketServer.exe.config
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\Vsan.SocketServer.exe
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\Vsan.SocketServer.pdb
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\log4net.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.Common.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.Facility.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.SocketBase.dll
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\log4net.xml
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.Common.xml
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.Facility.xml
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\bin\Debug\SuperSocket.SocketBase.xml
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\obj\Debug\Vsan.SocketServer.csprojAssemblyReference.cache
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\obj\Debug\Vsan.SocketServer.csproj.CoreCompileInputs.cache
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\obj\Debug\Vsan.SocketServer.csproj.CopyComplete
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\obj\Debug\Vsan.SocketServer.exe
+E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.SocketServer\obj\Debug\Vsan.SocketServer.pdb

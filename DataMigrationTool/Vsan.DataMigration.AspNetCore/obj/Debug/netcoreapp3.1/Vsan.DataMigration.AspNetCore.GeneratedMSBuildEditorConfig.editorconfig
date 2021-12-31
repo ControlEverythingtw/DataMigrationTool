@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = Vsan.DataMigration.AspNetCore
+build_property.ProjectDir = E:\Projects\DataMigrationTool\DataMigrationTool\Vsan.DataMigration.AspNetCore\

@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="GwyOrganUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\Vsan.DataMigration.Core\Vsan.DataMigration.Core.csproj">
       <Project>{F8C21DB4-3BCA-4C3E-8F60-5A4EAA86A27E}</Project>
       <Name>Vsan.DataMigration.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vsan.DataMigration.Models\Vsan.DataMigration.Models.csproj">
+      <Project>{FEC26681-7E01-43CD-BC96-BA750F9937BD}</Project>
+      <Name>Vsan.DataMigration.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8B782835-12F8-4F6E-B82C-27953779CE59}"
 EndProject
@@ -22,6 +22,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vsan.SocketServer", "Vsan.SocketServer\Vsan.SocketServer.csproj", "{3C5F0CF7-CDA6-4AFF-B2E5-17967ED37A39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vsan.SocketClient", "Vsan.SocketClient\Vsan.SocketClient.csproj", "{A02AF942-9C72-4DF2-B8FE-D3B0E930640D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vsan.DataMigration.AspNetCore", "Vsan.DataMigration.AspNetCore\Vsan.DataMigration.AspNetCore.csproj", "{03D04831-12EF-484F-B87C-6F5DEE62DB00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{42C7A8A6-7492-42E8-B024-65096F71FAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vsan.DataMigration.DAL", "Vsan.DataMigration.DAL\Vsan.DataMigration.DAL.csproj", "{778FCD32-9EC9-40A7-9476-244911F02A82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +109,22 @@ Global
 		{A02AF942-9C72-4DF2-B8FE-D3B0E930640D}.Preview|Any CPU.Build.0 = Release|Any CPU
 		{A02AF942-9C72-4DF2-B8FE-D3B0E930640D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A02AF942-9C72-4DF2-B8FE-D3B0E930640D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Grayscale|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Grayscale|Any CPU.Build.0 = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Preview|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Preview|Any CPU.Build.0 = Debug|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D04831-12EF-484F-B87C-6F5DEE62DB00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Grayscale|Any CPU.ActiveCfg = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Grayscale|Any CPU.Build.0 = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Preview|Any CPU.ActiveCfg = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Preview|Any CPU.Build.0 = Debug|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778FCD32-9EC9-40A7-9476-244911F02A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +134,7 @@ Global
 		{F8C21DB4-3BCA-4C3E-8F60-5A4EAA86A27E} = {8B782835-12F8-4F6E-B82C-27953779CE59}
 		{39691E8D-4A46-42EC-9C62-522A44B0E15B} = {8B782835-12F8-4F6E-B82C-27953779CE59}
 		{504A89EE-0C0F-4492-A3FF-FEC7FDD54B54} = {8B782835-12F8-4F6E-B82C-27953779CE59}
+		{778FCD32-9EC9-40A7-9476-244911F02A82} = {42C7A8A6-7492-42E8-B024-65096F71FAAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFBD83AF-EFB9-4F46-8501-B93C8E5E6F44}
